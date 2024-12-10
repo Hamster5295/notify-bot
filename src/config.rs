@@ -63,7 +63,7 @@ pub struct NotifyConfig {
 
     // Notification targets
     pub groups: Option<Vec<String>>,
-    pub people: Option<Vec<String>>,
+    pub users: Option<Vec<String>>,
 
     // Notification content
     pub message: String,
@@ -71,6 +71,13 @@ pub struct NotifyConfig {
 
     // Custom content extraction
     pub extra: Option<bool>,
-    pub extractor: Option<String>,
-    pub extract_fallback: Option<String>,
+    pub extractors: Option<Vec<ContentExtractConfig>>,
+}
+
+#[derive(Deserialize, Clone)]
+pub struct ContentExtractConfig {
+    pub name: String,
+    pub path: String,
+    pub fallback: Option<String>,
+    pub sep: Option<String>,
 }

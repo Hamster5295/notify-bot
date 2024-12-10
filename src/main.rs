@@ -120,7 +120,7 @@ async fn main() -> Result<()> {
         let mut notifications = HashMap::new();
         for n in &conf.notifications {
             notifications.insert(n.id.clone(), n.clone());
-            if n.groups.is_none() && n.people.is_none() {
+            if n.groups.is_none() && n.users.is_none() {
                 warn!(format!(
                     "Notification with ID [{}] has no group or person specified. It won't take any effect.",
                     n.id
