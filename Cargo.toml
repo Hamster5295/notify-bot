@@ -1,7 +1,9 @@
 [package]
 name = "notify-bot"
-version = "0.1.0"
+version = "0.0.1"
 edition = "2021"
+build = "build.rs"
+
 
 [dependencies]
 actix-web = "4"
@@ -11,11 +13,16 @@ futures = "0.3.31"
 reqwest = { version = "0.12.9", features = ["json"] }
 serde = { version = "1.0.215", features = ["derive"] }
 serde_json = "1.0.133"
+shadow-rs = "0.36.0"
 strfmt = "0.2.4"
 tklog = "0.2.7"
 tokio = { version = "1.41.1", features = ["full"] }
 
+
+[build-dependencies]
+shadow-rs = "0.36.0"
+
+
 [profile.release]
 strip = true
 lto = true
-incremental = true
