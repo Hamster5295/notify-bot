@@ -23,3 +23,5 @@ Cargo.lock
 *.log
 config.json
 Makefile.toml
+
+.vscode/

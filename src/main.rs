@@ -51,9 +51,9 @@ async fn main() -> Result<()> {
     LOG.set_console(true)
         .set_level(LEVEL::Info)
         .set_format(Format::LevelFlag | Format::Time | Format::ShortFileName)
-        .set_formatter("{level} {time} {file}\t> {message}\n")
+        .set_formatter("{level} {time} {file} > {message}\n")
         .set_attr_format(|attr_fmt| {
-            attr_fmt.set_body_fmt(|lvl, body| {
+            attr_fmt.set_console_body_fmt(|lvl, body| {
                 match lvl {
                     LEVEL::Trace => format!("{}{}{}", "\x1b[34m", body, "\x1b[0m"), //blue
                     LEVEL::Debug => format!("{}{}{}", "\x1b[36m", body, "\x1b[0m"), //cyan
