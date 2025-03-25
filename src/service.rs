@@ -25,14 +25,14 @@ pub async fn notify(
     let id = id.into_inner();
 
     if let Some(addr) = req.peer_addr() {
-        info!(format!("{} - /notify-{}", addr, id));
+        info!(format!("{} -> /notify-{}", addr, id));
     } else {
-        info!(format!("Unknown Addr - /notify-{}", id));
+        info!(format!("Unknown Addr -> /notify-{}", id));
     }
 
     if let Some(cfg) = conf.notifications.get(&id) {
         if cfg.token.is_none() || cfg.token == auth.as_ref().map(|a| a.token().to_string()) {
-            info!("Handling request body: \n{}", body);
+            info!("Handling request body: \n", body);
             handle_notify_request(&body, cfg, &conf, &client).await;
         } else {
             if auth.is_none() {
@@ -53,7 +53,7 @@ pub async fn notify(
 }
 
 async fn handle_notify_request(
-    req: &String,
+    req: &str,
     notify_cfg: &NotifyConfig,
     runtime_cfg: &RuntimeConfig,
     client: &Client,
@@ -61,11 +61,11 @@ async fn handle_notify_request(
     let mut msg: String = notify_cfg.message.clone();
 
     if notify_cfg.extra.unwrap_or(false) {
-        if notify_cfg.extractors.is_some() && notify_cfg.extractors.as_ref().unwrap().len() > 0 {
+        if notify_cfg.extractors.is_some() && !notify_cfg.extractors.as_ref().unwrap().is_empty() {
             let mut contents: HashMap<String, String> = HashMap::new();
 
             for extract in notify_cfg.extractors.as_ref().unwrap() {
-                let val: Result<Value, serde_json::Error> = serde_json::from_str(&req);
+                let val: Result<Value, serde_json::Error> = serde_json::from_str(req);
                 if let Err(err) = val {
                     warn!(format!("Failed to parse body as json: {}", err));
                 } else {
@@ -151,7 +151,7 @@ async fn handle_notify_request(
     info!("Notification Sent!");
 }
 
-fn extract_arg(val: &Value, path: &String, sep: &str) -> Option<String> {
+fn extract_arg(val: &Value, path: &str, sep: &str) -> Option<String> {
     extract_arg_impl(val.clone(), &path.split('.').collect(), sep, 0)
 }
 
@@ -176,7 +176,7 @@ fn extract_arg_impl(val: Value, paths: &Vec<&str>, sep: &str, idx: usize) -> Opt
         let idxs = current_path[1..current_path.len() - 1].to_string();
         let mut range = vec![];
 
-        if idxs.len() == 0 {
+        if idxs.is_empty() {
             for i in 0..arr.len() {
                 range.push(i);
             }
